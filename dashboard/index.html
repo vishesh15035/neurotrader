@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NeuroTrader v4.0</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#050508; --panel:#0a0a10; --border:#1a1a2e; --border2:#252540;
+  --green:#00ff88; --red:#ff3366; --yellow:#ffcc00;
+  --purple:#aa66ff; --cyan:#00ddff; --text:#e0e0f0; --muted:#606080;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* HEADER */
+#header{background:var(--panel);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.dot-live{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.header-right{display:flex;align-items:center;gap:8px}
+.ticker-btns{display:flex;gap:4px}
+.tbtn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:4px;padding:4px 10px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;transition:all 0.15s}
+.tbtn:hover,.tbtn.active{border-color:var(--cyan);color:var(--cyan);background:#00ddff11}
+.search-wrap{display:flex}
+.search-wrap input{background:var(--bg);border:1px solid var(--border2);border-right:none;color:var(--text);padding:5px 10px;font-size:11px;outline:none;font-family:'JetBrains Mono',monospace;border-radius:4px 0 0 4px;width:90px}
+.search-wrap button{background:#00ddff22;border:1px solid var(--border2);color:var(--cyan);padding:5px 10px;cursor:pointer;font-size:11px;font-family:'JetBrains Mono',monospace;border-radius:0 4px 4px 0}
+.status-badge{font-size:10px;padding:3px 8px;border-radius:3px}
+.status-computing{color:var(--yellow);animation:pulse 1s infinite}
+.status-ready{color:var(--green)}
+#clock{font-size:11px;color:var(--muted);min-width:80px;text-align:right}
+
+/* TAPE */
+#tape{background:var(--panel);border-bottom:1px solid var(--border);height:26px;overflow:hidden;display:flex;align-items:center}
+#tape-inner{display:flex;gap:50px;animation:ticker 40s linear infinite;white-space:nowrap;font-size:11px}
+
+/* HERO */
+#hero{padding:20px 24px 0;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;animation:fadein 0.4s ease}
+.hero-price{font-family:'Syne',sans-serif;font-size:54px;font-weight:800;line-height:1}
+.hero-ticker{font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:4px}
+.hero-change{font-size:13px;margin-top:4px}
+.hero-meta{font-size:10px;color:var(--muted);margin-top:4px}
+.hero-decision{text-align:right}
+.decision-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-bottom:6px}
+.decision-value{font-family:'Syne',sans-serif;font-size:38px;font-weight:800}
+.decision-sub{font-size:11px;color:var(--muted);margin-top:4px}
+#mini-chart{height:80px}
+
+/* VOTE BAR */
+.vote-bar-track{display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px}
+.vote-buy{background:var(--green)}
+.vote-hold{background:var(--yellow)}
+.vote-sell{background:var(--red)}
+.vote-labels{display:flex;justify-content:space-between;font-size:11px}
+
+/* TABS */
+#tabs{display:flex;padding:16px 24px 0;border-bottom:1px solid var(--border);margin-top:16px}
+.tab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:8px 20px;cursor:pointer;font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;transition:all 0.15s}
+.tab.active{border-bottom-color:var(--cyan);color:var(--cyan)}
+
+/* CONTENT */
+#content{padding:20px 24px 40px;animation:fadein 0.3s ease}
+
+/* PANELS */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:16px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-bar{width:3px;height:18px;background:var(--cyan);border-radius:2px}
+.section-title{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--cyan)}
+.section-sub{font-size:10px;color:var(--muted)}
+
+/* STAT CARDS */
+.stat-card{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 14px}
+.stat-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:4px}
+.stat-value{font-size:18px;font-weight:700}
+
+/* GRID LAYOUTS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.col-gap{display:flex;flex-direction:column;gap:14px}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr 300px;gap:16px}
+.models-grid{display:grid;grid-template-columns:1fr 300px;gap:16px}
+.vol-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mc-grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
+
+/* MODEL GRID */
+.model-group{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.model-group-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px}
+.model-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.model-name{font-size:11px;color:var(--text)}
+.signal-badge{border-radius:3px;padding:2px 6px;font-size:10px;font-weight:700;letter-spacing:1px}
+
+/* CHARTS */
+canvas{display:block}
+
+/* SPINNER */
+#loading{display:flex;justify-content:center;align-items:center;height:60vh;flex-direction:column;gap:16px}
+.spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.8s linear infinite}
+
+/* REGIME BADGES */
+.regime-row{display:flex;justify-content:space-around;margin-top:8px}
+.regime-item{text-align:center}
+.regime-pct{font-size:18px;font-weight:700}
+.regime-name{font-size:9px;color:var(--muted);margin-top:2px}
+
+/* LAYER BAR */
+.layer-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.layer-name{font-size:10px;color:var(--muted);width:90px;flex-shrink:0}
+.layer-track{flex:1;height:12px;background:var(--border);border-radius:6px;overflow:hidden;position:relative}
+.layer-fill{height:100%;border-radius:6px;transition:width 0.5s ease}
+.layer-score{font-size:10px;color:var(--muted);width:50px;text-align:right;flex-shrink:0}
+
+/* VOTE BOX */
+.vote-box{text-align:center;border-radius:5px;padding:14px}
+.vote-num{font-size:30px;font-weight:700}
+.vote-lbl{font-size:10px;color:var(--muted);margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="logo">
+    <div class="dot-live"></div>
+    NEUROTRADER
+    <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-weight:400">v4.0</span>
+    <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-weight:400">· 19 MODELS · LIVE</span>
+    <span id="status-badge" class="status-badge"></span>
+  </div>
+  <div class="header-right">
+    <div class="search-wrap">
+      <input id="search-input" placeholder="TICKER..." onkeydown="if(event.key==='Enter')goTicker()"/>
+      <button onclick="goTicker()">GO</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px">
+    <div class="ticker-btns" id="ticker-btns">
+      <span style="font-size:9px;color:var(--muted);letter-spacing:1px">US</span>
+      <button class="tbtn active" onclick="loadTicker('AAPL',this)">AAPL</button>
+      <button class="tbtn" onclick="loadTicker('NVDA',this)">NVDA</button>
+      <button class="tbtn" onclick="loadTicker('MSFT',this)">MSFT</button>
+      <button class="tbtn" onclick="loadTicker('GOOGL',this)">GOOGL</button>
+      <button class="tbtn" onclick="loadTicker('SPY',this)">SPY</button>
+      <span style="font-size:9px;color:var(--muted);letter-spacing:1px;margin-left:8px">IN</span>
+      <button class="tbtn" onclick="loadTicker('RELIANCE.NS',this)">RELIANCE</button>
+      <button class="tbtn" onclick="loadTicker('TCS.NS',this)">TCS</button>
+      <button class="tbtn" onclick="loadTicker('INFY.NS',this)">INFY</button>
+      <button class="tbtn" onclick="loadTicker('HDFCBANK.NS',this)">HDFC</button>
+      <button class="tbtn" onclick="loadTicker('TATAMOTORS.NS',this)">TATA</button>
+      <button class="tbtn" onclick="loadTicker('^NSEI',this)">NIFTY50</button>
+      <button class="tbtn" onclick="loadTicker('INDA',this)">INDA ETF</button>
+    </div>
+    </div>
+    <button class="tbtn" onclick="refreshTicker()" style="border-color:var(--border2)">⟳ REFRESH</button>
+    <div id="clock">--:--:--</div>
+  </div>
+</div>
+
+<!-- TAPE -->
+<div id="tape"><div id="tape-inner">Loading market data...</div></div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="loading"><div class="spinner"></div><div style="color:var(--muted);font-size:12px">Fetching data...</div></div>
+  <div id="dashboard" style="display:none">
+    <!-- HERO -->
+    <div id="hero">
+      <div>
+        <div class="hero-ticker" id="h-ticker">AAPL · NASDAQ</div>
+        <div class="hero-price" id="h-price">$---</div>
+        <div class="hero-change" id="h-change">---</div>
+        <div class="hero-meta" id="h-meta">---</div>
+      </div>
+      <div><canvas id="mini-chart" width="400" height="80"></canvas></div>
+      <div class="hero-decision">
+        <div class="decision-label">ENSEMBLE DECISION</div>
+        <div class="decision-value" id="h-decision">---</div>
+        <div class="decision-sub" id="h-score">Score: --- · Conf: ---%</div>
+        <div style="margin-top:10px;width:220px">
+          <div class="vote-bar-track">
+            <div class="vote-buy" id="vb-buy" style="width:33%"></div>
+            <div class="vote-hold" id="vb-hold" style="width:34%"></div>
+            <div class="vote-sell" id="vb-sell" style="width:33%"></div>
+          </div>
+          <div class="vote-labels">
+            <span style="color:var(--green)">▲ BUY <span id="vl-buy">0</span></span>
+            <span style="color:var(--yellow)">— HOLD <span id="vl-hold">0</span></span>
+            <span style="color:var(--red)">▼ SELL <span id="vl-sell">0</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div id="tabs">
+      <button class="tab active" onclick="switchTab('overview',this)">OVERVIEW</button>
+      <button class="tab" onclick="switchTab('models',this)">MODELS</button>
+      <button class="tab" onclick="switchTab('volatility',this)">VOLATILITY</button>
+      <button class="tab" onclick="switchTab('montecarlo',this)">MONTE CARLO</button>
+    </div>
+
+    <div id="content">
+
+      <!-- OVERVIEW TAB -->
+      <div id="tab-overview">
+        <div class="overview-grid">
+          <div class="col-gap">
+            <div class="panel">
+              <div class="section-header"><div class="section-bar"></div><span class="section-title">PRICE HISTORY</span><span class="section-sub">120 sessions</span></div>
+              <canvas id="price-chart" height="180"></canvas>
+            </div>
+            <div class="panel">
+              <div class="section-header"><div class="section-bar"></div><span class="section-title">GARCH CONDITIONAL VOLATILITY</span></div>
+              <canvas id="vol-chart" height="120"></canvas>
+              <div style="font-size:10px;color:var(--muted);margin-top:6px">
+                <span style="color:var(--red)">— 30% threshold</span>
+                &nbsp;&nbsp;Forecast: <span id="ov-garchvol">...</span>%
+                &nbsp;&nbsp;Persistence: <span id="ov-persist">...</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-gap">
+            <div class="panel">
+              <div class="section-header"><div class="section-bar"></div><span class="section-title">RISK METRICS</span></div>
+              <div class="grid-2">
+                <div class="stat-card"><div class="stat-label">VaR 95% (30d)</div><div class="stat-value" id="r-var95" style="color:var(--red)">...</div></div>
+                <div class="stat-card"><div class="stat-label">GARCH VOL</div><div class="stat-value" id="r-gvol" style="color:var(--purple)">...</div></div>
+                <div class="stat-card"><div class="stat-label">IV SKEW</div><div class="stat-value" id="r-ivskew">...</div></div>
+                <div class="stat-card"><div class="stat-label">VWAP DEV</div><div class="stat-value" id="r-vwap">...</div></div>
+                <div class="stat-card"><div class="stat-label">OU HALF-LIFE</div><div class="stat-value" id="r-ou" style="color:var(--cyan)">...</div></div>
+                <div class="stat-card"><div class="stat-label">HESTON ρ</div><div class="stat-value" id="r-heston" style="color:var(--purple)">...</div></div>
+                <div class="stat-card"><div class="stat-label">CRASH RISK</div><div class="stat-value" id="r-crash" style="color:var(--red)">...</div></div>
+                <div class="stat-card"><div class="stat-label">HMM REGIME</div><div class="stat-value" id="r-hmm">...</div></div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="section-header"><div class="section-bar"></div><span class="section-title">LAYER SCORES</span></div>
+              <div id="layer-bars"></div>
+            </div>
+          </div>
+          <div class="col-gap">
+            <div class="panel">
+              <div class="section-header"><div class="section-bar"></div><span class="section-title">HMM REGIME</span></div>
+              <canvas id="regime-chart" height="150"></canvas>
+              <div class="regime-row" id="regime-row"></div>
+            </div>
+            <div class="grid-2">
+              <div class="stat-card"><div class="stat-label">MACRO</div><div class="stat-value" id="r-macro" style="color:var(--yellow)">...</div></div>
+              <div class="stat-card"><div class="stat-label">RSI</div><div class="stat-value" id="r-rsi">...</div></div>
+              <div class="stat-card"><div class="stat-label">PC RATIO</div><div class="stat-value" id="r-pc" style="color:var(--cyan)">...</div></div>
+              <div class="stat-card"><div class="stat-label">MODELS</div><div class="stat-value" id="r-models" style="color:var(--green)">19</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODELS TAB -->
+      <div id="tab-models" style="display:none">
+        <div class="models-grid">
+          <div class="panel">
+            <div class="section-header"><div class="section-bar"></div><span class="section-title">ALL MODEL SIGNALS</span><span class="section-sub">19 models · 5 layers</span></div>
+            <div id="model-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+          </div>
+          <div class="col-gap">
+            <div class="panel">
+              <div class="section-header"><div class="section-bar"></div><span class="section-title">VOTE BREAKDOWN</span></div>
+              <div class="vote-bar-track">
+                <div class="vote-buy" id="m-vb-buy" style="width:33%"></div>
+                <div class="vote-hold" id="m-vb-hold" style="width:34%"></div>
+                <div class="vote-sell" id="m-vb-sell" style="width:33%"></div>
+              </div>
+              <div class="vote-labels" style="margin-bottom:12px">
+                <span style="color:var(--green)">▲ BUY <span id="m-vl-buy">0</span></span>
+                <span style="color:var(--yellow)">— HOLD <span id="m-vl-hold">0</span></span>
+                <span style="color:var(--red)">▼ SELL <span id="m-vl-sell">0</span></span>
+              </div>
+              <div class="grid-3">
+                <div class="vote-box" id="vbox-buy" style="background:#00ff8818;border:1px solid #00ff8844"><div class="vote-num" id="vbox-buy-n" style="color:var(--green)">0</div><div class="vote-lbl">BUY</div></div>
+                <div class="vote-box" id="vbox-hold" style="background:#ffcc0018;border:1px solid #ffcc0044"><div class="vote-num" id="vbox-hold-n" style="color:var(--yellow)">0</div><div class="vote-lbl">HOLD</div></div>
+                <div class="vote-box" id="vbox-sell" style="background:#ff336618;border:1px solid #ff336644"><div class="vote-num" id="vbox-sell-n" style="color:var(--red)">0</div><div class="vote-lbl">SELL</div></div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="section-header"><div class="section-bar"></div><span class="section-title">LAYER SCORES</span></div>
+              <div id="layer-bars-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VOLATILITY TAB -->
+      <div id="tab-volatility" style="display:none">
+        <div class="vol-grid">
+          <div class="panel">
+            <div class="section-header"><div class="section-bar"></div><span class="section-title">GARCH(1,1) VOLATILITY</span></div>
+            <canvas id="vol-chart-2" height="150"></canvas>
+            <div class="grid-3" style="margin-top:14px">
+              <div class="stat-card"><div class="stat-label">FORECAST VOL</div><div class="stat-value" id="v-gvol" style="color:var(--purple)">...</div></div>
+              <div class="stat-card"><div class="stat-label">PERSISTENCE</div><div class="stat-value" id="v-persist" style="color:var(--cyan)">...</div></div>
+              <div class="stat-card"><div class="stat-label">REGIME</div><div class="stat-value" id="v-regime">...</div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="section-header"><div class="section-bar"></div><span class="section-title">HESTON + COPULA + OU</span></div>
+            <div class="grid-2" style="margin-top:8px">
+              <div class="stat-card"><div class="stat-label">HESTON ρ</div><div class="stat-value" id="v-hrho" style="color:var(--red)">...</div></div>
+              <div class="stat-card"><div class="stat-label">VaR 95%</div><div class="stat-value" id="v-var" style="color:var(--red)">...</div></div>
+              <div class="stat-card"><div class="stat-label">CRASH RISK</div><div class="stat-value" id="v-crash" style="color:var(--red)">...</div></div>
+              <div class="stat-card"><div class="stat-label">RALLY COUP.</div><div class="stat-value" id="v-rally" style="color:var(--green)">...</div></div>
+              <div class="stat-card"><div class="stat-label">OU HALF-LIFE</div><div class="stat-value" id="v-ou" style="color:var(--cyan)">...</div></div>
+              <div class="stat-card"><div class="stat-label">IV SKEW</div><div class="stat-value" id="v-ivskew" style="color:var(--yellow)">...</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MONTE CARLO TAB -->
+      <div id="tab-montecarlo" style="display:none">
+        <div class="mc-grid">
+          <div class="panel">
+            <div class="section-header"><div class="section-bar"></div><span class="section-title">MONTE CARLO — 10,000 PATHS</span><span class="section-sub">GBM + Jump Diffusion · 30d</span></div>
+            <canvas id="mc-chart" height="220"></canvas>
+            <div style="font-size:10px;color:var(--muted);margin-top:8px;display:flex;gap:20px">
+              <span style="color:var(--cyan)">— Mean</span>
+              <span style="color:var(--green);opacity:0.8">-- P95</span>
+              <span style="color:var(--red);opacity:0.8">-- P5</span>
+            </div>
+          </div>
+          <div class="col-gap">
+            <div class="panel">
+              <div class="section-header"><div class="section-bar"></div><span class="section-title">RISK DISTRIBUTION</span></div>
+              <div class="grid-2">
+                <div class="stat-card"><div class="stat-label">VaR 95%</div><div class="stat-value" id="mc-var" style="color:var(--red)">...</div></div>
+                <div class="stat-card"><div class="stat-label">CVaR 95%</div><div class="stat-value" id="mc-cvar" style="color:var(--red)">...</div></div>
+                <div class="stat-card"><div class="stat-label">P(+10%)</div><div class="stat-value" id="mc-pup" style="color:var(--green)">...</div></div>
+                <div class="stat-card"><div class="stat-label">P(-10%)</div><div class="stat-value" id="mc-pdn" style="color:var(--yellow)">...</div></div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="section-header"><div class="section-bar"></div><span class="section-title">GBM PARAMS</span></div>
+              <div class="grid-2">
+                <div class="stat-card"><div class="stat-label">SIGMA σ</div><div class="stat-value" id="mc-sigma" style="color:var(--purple)">...</div></div>
+                <div class="stat-card"><div class="stat-label">HESTON ρ</div><div class="stat-value" id="mc-rho" style="color:var(--red)">...</div></div>
+                <div class="stat-card"><div class="stat-label">JUMP λ</div><div class="stat-value" style="color:var(--yellow)">0.10</div></div>
+                <div class="stat-card"><div class="stat-label">HORIZON</div><div class="stat-value" style="color:var(--muted)">30d</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://127.0.0.1:5000/api';
+let currentTicker = 'AAPL';
+let currentData   = null;
+let pollTimer     = null;
+let charts        = {};
+
+// ── Clock ──────────────────────────────────────
+setInterval(() => {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US');
+}, 1000);
+
+// ── Colors ─────────────────────────────────────
+function decisionColor(d) {
+  if (!d) return '#ffcc00';
+  if (d.includes('BUY')) return '#00ff88';
+  if (d.includes('SELL')) return '#ff3366';
+  return '#ffcc00';
+}
+function signalColor(s) {
+  if (s === 'BUY')  return '#00ff88';
+  if (s === 'SELL') return '#ff3366';
+  return '#ffcc00';
+}
+
+// ── Ticker Load ────────────────────────────────
+// Indian NSE tickers list
+const NSE_TICKERS = ["RELIANCE","TCS","INFY","HDFCBANK","WIPRO","ICICIBANK",
+  "KOTAKBANK","SBIN","BAJFINANCE","BHARTIARTL","HINDUNILVR","ASIANPAINT",
+  "MARUTI","TATAMOTORS","HCLTECH","SUNPHARMA","ONGC","POWERGRID","NTPC",
+  "ADANIPORTS","ULTRACEMCO","TITAN","NESTLEIND","TECHM","DRREDDY"];
+
+function goTicker() {
+  let v = document.getElementById('search-input').value.trim().toUpperCase();
+  if (!v) return;
+  // Auto-add .NS for Indian stocks
+  if (NSE_TICKERS.includes(v) && !v.endsWith('.NS')) v = v + '.NS';
+  document.getElementById('search-input').value='';
+  loadTicker(v);
+}
+function refreshTicker() {
+  fetch(`${API}/ticker/${currentTicker}/refresh`);
+  clearInterval(pollTimer);
+  loadTicker(currentTicker);
+}
+function loadTicker(t, btn) {
+  currentTicker = t;
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  clearInterval(pollTimer);
+  document.getElementById('loading').style.display='flex';
+  document.getElementById('dashboard').style.display='none';
+  fetchData();
+  pollTimer = setInterval(fetchData, 3000);
+}
+
+async function fetchData() {
+  try {
+    const r = await fetch(`${API}/ticker/${currentTicker}`);
+    const d = await r.json();
+    currentData = d;
+    render(d);
+    if (d.status === 'full') { clearInterval(pollTimer); }
+  } catch(e) { console.error(e); }
+}
+
+// ── Tape ────────────────────────────────────────
+async function loadTape() {
+  try {
+    const r = await fetch(`${API}/scan`);
+    const d = await r.json();
+    const items = Object.values(d).filter(x=>x.price).map(x =>
+      `<span style="color:${(x.changePct||0)<0?'#ff3366':'#00ff88'}">${x.ticker} &nbsp;$${x.price}&nbsp; ${(x.changePct||0)>=0?'▲':'▼'}${Math.abs(x.changePct||0).toFixed(2)}%</span>`
+    );
+    if (items.length) {
+      const all = [...items,...items,...items,...items].join('<span style="color:#252540">&nbsp;&nbsp;│&nbsp;&nbsp;</span>');
+      document.getElementById('tape-inner').innerHTML = all;
+    }
+  } catch(e) {}
+}
+loadTape();
+setInterval(loadTape, 30000);
+
+// ── Render ─────────────────────────────────────
+function render(d) {
+  if (d.error) return;
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  // Status badge
+  const sb = document.getElementById('status-badge');
+  if (d.status === 'full') {
+    sb.textContent = '● FULL ANALYSIS READY';
+    sb.className = 'status-badge status-ready';
+  } else {
+    sb.textContent = '● COMPUTING 19 MODELS...';
+    sb.className = 'status-badge status-computing';
+  }
+
+  // Hero
+  const col = decisionColor(d.decision);
+  const exchange = d.ticker.endsWith('.NS') ? 'NSE' : d.ticker.startsWith('^') ? 'INDEX' : 'NASDAQ';
+  document.getElementById('h-ticker').textContent = `${d.ticker} · ${exchange}`;
+  const isIndian = d.ticker.endsWith('.NS') || d.ticker.endsWith('.BO') || d.ticker === '^NSEI';
+  const currSym = isIndian ? '₹' : '$';
+  window._currSym = currSym;
+  document.getElementById('h-price').textContent  = `${currSym}${d.price}`;
+  document.getElementById('h-price').style.color  = col;
+  const chg = d.change||0, pct = d.changePct||0;
+  document.getElementById('h-change').textContent = `${pct>=0?'▲':'▼'} ${currSym}${Math.abs(chg).toFixed(2)} (${Math.abs(pct).toFixed(2)}%)`;
+  document.getElementById('h-change').style.color = pct>=0?'#00ff88':'#ff3366';
+  const volUnit = isIndian ? 'Cr' : 'M';
+  const volDivisor = isIndian ? 1e7 : 1e6;
+  document.getElementById('h-meta').textContent   = `Vol: ${((d.volume||0)/volDivisor).toFixed(1)}${volUnit} · PE: ${d.pe||'N/A'} · RSI: ${(d.rsi||0).toFixed(1)}`;
+  document.getElementById('h-decision').textContent = d.decision || 'COMPUTING...';
+  document.getElementById('h-decision').style.color = col;
+  document.getElementById('h-score').textContent = `Score: ${(d.score||0).toFixed(4)} · Conf: ${(d.confidence||0).toFixed(1)}%`;
+
+  // Votes
+  const votes = d.votes || {BUY:0,HOLD:0,SELL:0};
+  const total = (votes.BUY||0)+(votes.HOLD||0)+(votes.SELL||0)||1;
+  ['buy','hold','sell'].forEach(k=>{
+    const v = votes[k.toUpperCase()]||0;
+    document.getElementById(`vb-${k}`).style.width   = `${v/total*100}%`;
+    document.getElementById(`vl-${k}`).textContent   = v;
+    document.getElementById(`m-vb-${k}`).style.width = `${v/total*100}%`;
+    document.getElementById(`m-vl-${k}`).textContent = v;
+    document.getElementById(`vbox-${k}-n`).textContent = v;
+  });
+
+  // Overview stats
+  const gv = d.garchVol||0;
+  document.getElementById('ov-garchvol').textContent = gv || '...';
+  document.getElementById('ov-persist').textContent  = d.garchPersistence ? d.garchPersistence.toFixed(4) : '...';
+  document.getElementById('r-var95').textContent  = d.var95 ? `${d.var95}%` : '...';
+  document.getElementById('r-gvol').textContent   = gv ? `${gv}%` : '...';
+  document.getElementById('r-ivskew').textContent = d.ivSkew ? d.ivSkew.toFixed(4) : '...';
+  document.getElementById('r-ivskew').style.color = (d.ivSkew||0)>0.1?'#ff3366':'#00ff88';
+  document.getElementById('r-vwap').textContent   = d.vwapDev ? `${d.vwapDev}%` : '...';
+  document.getElementById('r-vwap').style.color   = (d.vwapDev||0)<0?'#ff3366':'#00ff88';
+  document.getElementById('r-ou').textContent     = d.ouHalfLife ? `${d.ouHalfLife}d` : '...';
+  document.getElementById('r-heston').textContent = d.hestonRho ? d.hestonRho.toFixed(4) : '...';
+  document.getElementById('r-crash').textContent  = d.copula?.crash ? `${(d.copula.crash*100).toFixed(1)}%` : '...';
+  document.getElementById('r-hmm').textContent    = d.hmm || '...';
+  document.getElementById('r-hmm').style.color    = d.hmm==='BULL'?'#00ff88':d.hmm==='BEAR'?'#ff3366':'#ffcc00';
+  document.getElementById('r-macro').textContent  = d.macro || '...';
+  document.getElementById('r-rsi').textContent    = d.rsi ? d.rsi.toFixed(1) : '...';
+  document.getElementById('r-rsi').style.color    = (d.rsi||50)>70?'#ff3366':(d.rsi||50)<30?'#00ff88':'#ffcc00';
+  document.getElementById('r-pc').textContent     = d.pcRatio ? d.pcRatio.toFixed(3) : '...';
+  document.getElementById('r-models').textContent = d.totalModels || 19;
+
+  // Volatility tab
+  document.getElementById('v-gvol').textContent   = gv ? `${gv}%` : '...';
+  document.getElementById('v-persist').textContent= d.garchPersistence ? d.garchPersistence.toFixed(4) : '...';
+  document.getElementById('v-regime').textContent = gv>30?'HIGH':'NORMAL';
+  document.getElementById('v-regime').style.color = gv>30?'#ff3366':'#00ff88';
+  document.getElementById('v-hrho').textContent   = d.hestonRho ? d.hestonRho.toFixed(4) : '...';
+  document.getElementById('v-var').textContent    = d.var95 ? `${d.var95}%` : '...';
+  document.getElementById('v-crash').textContent  = d.copula?.crash ? `${(d.copula.crash*100).toFixed(1)}%` : '...';
+  document.getElementById('v-rally').textContent  = d.copula?.rally ? `${(d.copula.rally*100).toFixed(1)}%` : '...';
+  document.getElementById('v-ou').textContent     = d.ouHalfLife ? `${d.ouHalfLife}d` : '...';
+  document.getElementById('v-ivskew').textContent = d.ivSkew ? d.ivSkew.toFixed(4) : '...';
+
+  // MC tab
+  document.getElementById('mc-var').textContent   = d.var95 ? `${d.var95}%` : '...';
+  document.getElementById('mc-cvar').textContent  = d.mcRisk?.CVaR_95 ? `${d.mcRisk.CVaR_95}%` : '...';
+  document.getElementById('mc-pup').textContent   = d.mcRisk?.p_up_10pct ? `${d.mcRisk.p_up_10pct}%` : '...';
+  document.getElementById('mc-pdn').textContent   = d.mcRisk?.p_down_10pct ? `${d.mcRisk.p_down_10pct}%` : '...';
+  document.getElementById('mc-sigma').textContent = gv ? `${gv}%` : '...';
+  document.getElementById('mc-rho').textContent   = d.hestonRho ? d.hestonRho.toFixed(4) : '...';
+
+  // Layer bars
+  renderLayerBars(d.layers, 'layer-bars');
+  renderLayerBars(d.layers, 'layer-bars-2');
+
+  // Regime
+  renderRegime(d.regimeProbabilities);
+
+  // Model grid
+  renderModelGrid(d.signals);
+
+  // Charts
+  if (d.priceHistory?.length) {
+    drawLineChart('mini-chart',  d.priceHistory, 'price', col, true);
+    drawLineChart('price-chart', d.priceHistory, 'price', col, false);
+  }
+  if (d.volSeries?.length) {
+    drawVolChart('vol-chart',   d.volSeries);
+    drawVolChart('vol-chart-2', d.volSeries);
+  }
+  if (d.monteCarloPaths?.length) {
+    drawMCChart('mc-chart', d.monteCarloPaths, d.price);
+  }
+  drawRegimeRadar('regime-chart', d.regimeProbabilities);
+}
+
+// ── Layer Bars ─────────────────────────────────
+function renderLayerBars(layers, containerId) {
+  if (!layers?.length) return;
+  const el = document.getElementById(containerId);
+  el.innerHTML = layers.map(l => {
+    const s = l.score||0;
+    const pct = Math.abs(s)*100;
+    const col = s>0?'#00ff88':'#ff3366';
+    const left = s<0 ? `${50-pct/2}%` : '50%';
+    return `<div class="layer-row">
+      <div class="layer-name">${l.name}</div>
+      <div class="layer-track">
+        <div class="layer-fill" style="width:${pct}%;margin-left:${s>=0?'50%':'${50-pct}%'};background:${col}"></div>
+      </div>
+      <div class="layer-score" style="color:${col}">${s.toFixed(3)}</div>
+    </div>`;
+  }).join('');
+  // Fix margin-left for negative
+  el.querySelectorAll('.layer-row').forEach((row,i) => {
+    const s = layers[i].score||0;
+    const pct = Math.abs(s)*100;
+    const fill = row.querySelector('.layer-fill');
+    fill.style.marginLeft = s>=0 ? '50%' : `${50-pct}%`;
+  });
+}
+
+// ── Regime ─────────────────────────────────────
+function renderRegime(rp) {
+  if (!rp?.length) return;
+  const row = document.getElementById('regime-row');
+  row.innerHTML = rp.map(r => {
+    const col = r.name==='BULL'?'#00ff88':r.name==='BEAR'?'#ff3366':'#ffcc00';
+    return `<div class="regime-item">
+      <div class="regime-pct" style="color:${col}">${r.value}%</div>
+      <div class="regime-name">${r.name}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Model Grid ─────────────────────────────────
+function renderModelGrid(signals) {
+  if (!signals) return;
+  const groups = [
+    {label:'DEEP LEARNING',   keys:['lstm','transformer','gp']},
+    {label:'STATE ESTIMATION',keys:['kalman','particle','hmm']},
+    {label:'VOLATILITY',      keys:['garch','egarch','heston']},
+    {label:'TIME SERIES',     keys:['ou','ms_arima','copula']},
+    {label:'SIGNAL SOURCES',  keys:['options','cross_asset','micro','sentiment']},
+    {label:'SPECTRAL',        keys:['fourier','wavelet','monte_carlo']},
+  ];
+  const labels = {lstm:'LSTM',transformer:'Transformer',gp:'Gaussian Proc',
+    kalman:'Kalman Filter',particle:'Particle (1k)',hmm:'HMM',
+    garch:'GARCH(1,1)',egarch:'EGARCH',heston:'Heston SV',
+    ou:'Ornstein-Uhl.',ms_arima:'MS-ARIMA',copula:'Copula',
+    options:'Options Flow',cross_asset:'Cross-Asset',micro:'Microstructure',
+    sentiment:'Sentiment',fourier:'Fourier FFT',wavelet:'Wavelet DWT',monte_carlo:'Monte Carlo'};
+  document.getElementById('model-grid').innerHTML = groups.map(g => `
+    <div class="model-group">
+      <div class="model-group-label">${g.label}</div>
+      ${g.keys.map(k => {
+        const sig = signals[k]||'HOLD';
+        const col = signalColor(sig);
+        return `<div class="model-row">
+          <span class="model-name">${labels[k]}</span>
+          <span class="signal-badge" style="background:${col}18;border:1px solid ${col}44;color:${col}">${sig}</span>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+// ── Canvas Charts ──────────────────────────────
+function drawLineChart(id, data, key, color, mini) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.offsetWidth - 32;
+  const W = canvas.width, H = canvas.height;
+  const vals = data.map(d=>d[key]);
+  const min = Math.min(...vals)*0.995, max = Math.max(...vals)*1.005;
+  const x = i => i/(vals.length-1)*W;
+  const y = v => H - (v-min)/(max-min)*H;
+  ctx.clearRect(0,0,W,H);
+  if (!mini) {
+    // Grid lines
+    ctx.strokeStyle = '#1a1a2e'; ctx.lineWidth = 1;
+    for (let i=0;i<5;i++) { ctx.beginPath(); ctx.moveTo(0,H/4*i); ctx.lineTo(W,H/4*i); ctx.stroke(); }
+    // Y labels
+    ctx.fillStyle = '#606080'; ctx.font = '9px JetBrains Mono'; ctx.textAlign='right';
+    for (let i=0;i<5;i++) {
+      const v = max - (max-min)/4*i;
+      const cs = window._currSym||'$';
+      ctx.fillText(`${cs}${v.toFixed(0)}`, W-2, H/4*i+3);
+    }
+  }
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0, color+'44');
+  grad.addColorStop(1, color+'00');
+  ctx.beginPath();
+  ctx.moveTo(x(0),y(vals[0]));
+  vals.forEach((v,i)=>i>0&&ctx.lineTo(x(i),y(v)));
+  ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+  ctx.fillStyle = grad; ctx.fill();
+  // Line
+  ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=1.5;
+  ctx.moveTo(x(0),y(vals[0]));
+  vals.forEach((v,i)=>i>0&&ctx.lineTo(x(i),y(v)));
+  ctx.stroke();
+}
+
+function drawVolChart(id, data) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.offsetWidth - 32;
+  const W = canvas.width, H = canvas.height;
+  const vals = data.map(d=>d.vol);
+  const min = 0, max = Math.max(...vals, 40)*1.05;
+  const x = i => i/(vals.length-1)*W;
+  const y = v => H - (v-min)/(max-min)*H;
+  ctx.clearRect(0,0,W,H);
+  // 30% line
+  const y30 = y(30);
+  ctx.strokeStyle='#ff336666'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(0,y30); ctx.lineTo(W,y30); ctx.stroke();
+  ctx.setLineDash([]);
+  // Gradient
+  const grad = ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'#aa66ff44'); grad.addColorStop(1,'#aa66ff00');
+  ctx.beginPath(); ctx.moveTo(x(0),y(vals[0]));
+  vals.forEach((v,i)=>i>0&&ctx.lineTo(x(i),y(v)));
+  ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+  ctx.fillStyle=grad; ctx.fill();
+  ctx.beginPath(); ctx.strokeStyle='#aa66ff'; ctx.lineWidth=1.5;
+  ctx.moveTo(x(0),y(vals[0]));
+  vals.forEach((v,i)=>i>0&&ctx.lineTo(x(i),y(v)));
+  ctx.stroke();
+}
+
+function drawMCChart(id, paths, S0) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.offsetWidth - 32;
+  const W = canvas.width, H = canvas.height;
+  const allVals = paths.flatMap(p=>[p.mean,p.p95,p.p5,p.p0||0,p.p1||0,p.p2||0]).filter(Boolean);
+  const min = Math.min(...allVals)*0.99, max = Math.max(...allVals)*1.01;
+  const x = i => i/(paths.length-1)*W;
+  const y = v => H-(v-min)/(max-min)*H;
+  ctx.clearRect(0,0,W,H);
+  // Grid
+  ctx.strokeStyle='#1a1a2e'; ctx.lineWidth=1;
+  for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo(0,H/4*i);ctx.lineTo(W,H/4*i);ctx.stroke();}
+  // S0 reference
+  ctx.strokeStyle='#30304855'; ctx.lineWidth=1; ctx.setLineDash([2,4]);
+  const ys0=y(S0); ctx.beginPath();ctx.moveTo(0,ys0);ctx.lineTo(W,ys0);ctx.stroke();
+  ctx.setLineDash([]);
+  // Sample paths
+  [['p0','#ff336633'],['p1','#ff883333'],['p2','#ffcc0033'],['p3','#44ff8833'],['p4','#4488ff33']].forEach(([k,col])=>{
+    if(!paths[0][k]) return;
+    ctx.beginPath(); ctx.strokeStyle=col; ctx.lineWidth=1;
+    ctx.moveTo(x(0),y(paths[0][k]));
+    paths.forEach((p,i)=>i>0&&ctx.lineTo(x(i),y(p[k])));
+    ctx.stroke();
+  });
+  // P95/P5
+  [[paths.map(p=>p.p95),'#00ff88'],[paths.map(p=>p.p5),'#ff3366']].forEach(([vals,col])=>{
+    ctx.beginPath(); ctx.strokeStyle=col; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+    ctx.moveTo(x(0),y(vals[0]));
+    vals.forEach((v,i)=>i>0&&ctx.lineTo(x(i),y(v)));
+    ctx.stroke(); ctx.setLineDash([]);
+  });
+  // Mean
+  ctx.beginPath(); ctx.strokeStyle='#00ddff'; ctx.lineWidth=2;
+  ctx.moveTo(x(0),y(paths[0].mean));
+  paths.forEach((p,i)=>i>0&&ctx.lineTo(x(i),y(p.mean)));
+  ctx.stroke();
+  // Y labels
+  ctx.fillStyle='#606080'; ctx.font='9px JetBrains Mono'; ctx.textAlign='right';
+  for(let i=0;i<5;i++){const v=max-(max-min)/4*i; ctx.fillText(`$${v.toFixed(0)}`,W-2,H/4*i+3);}
+}
+
+function drawRegimeRadar(id, rp) {
+  const canvas = document.getElementById(id);
+  if (!canvas||!rp?.length) return;
+  canvas.width = 280; canvas.height = 150;
+  const ctx = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  const cx=W/2, cy=H/2+10, r=55;
+  ctx.clearRect(0,0,W,H);
+  const n=rp.length;
+  const angles = rp.map((_,i)=>-Math.PI/2 + (2*Math.PI/n)*i);
+  // Grid circles
+  [0.25,0.5,0.75,1].forEach(frac=>{
+    ctx.beginPath(); ctx.strokeStyle='#1a1a2e'; ctx.lineWidth=1;
+    angles.forEach((a,i)=>{
+      const px=cx+Math.cos(a)*r*frac, py=cy+Math.sin(a)*r*frac;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    });
+    ctx.closePath(); ctx.stroke();
+  });
+  // Axes
+  angles.forEach(a=>{
+    ctx.beginPath(); ctx.strokeStyle='#1a1a2e'; ctx.lineWidth=1;
+    ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*r, cy+Math.sin(a)*r); ctx.stroke();
+  });
+  // Data
+  ctx.beginPath(); ctx.strokeStyle='#00ddff'; ctx.lineWidth=1.5; ctx.fillStyle='#00ddff18';
+  rp.forEach((d,i)=>{
+    const frac=d.value/100;
+    const px=cx+Math.cos(angles[i])*r*frac, py=cy+Math.sin(angles[i])*r*frac;
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  });
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  // Labels
+  ctx.fillStyle='#606080'; ctx.font='10px JetBrains Mono'; ctx.textAlign='center';
+  rp.forEach((d,i)=>{
+    const px=cx+Math.cos(angles[i])*(r+14), py=cy+Math.sin(angles[i])*(r+14);
+    ctx.fillText(d.name, px, py+3);
+  });
+}
+
+// ── Tabs ────────────────────────────────────────
+function switchTab(name, btn) {
+  ['overview','models','volatility','montecarlo'].forEach(t=>{
+    document.getElementById(`tab-${t}`).style.display = t===name?'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  // Redraw charts on tab switch
+  if (currentData) {
+    setTimeout(()=>{
+      if (currentData.volSeries?.length) {
+        drawVolChart('vol-chart-2', currentData.volSeries);
+      }
+      if (currentData.monteCarloPaths?.length) {
+        drawMCChart('mc-chart', currentData.monteCarloPaths, currentData.price);
+      }
+    }, 50);
+  }
+}
+
+// ── Init ────────────────────────────────────────
+loadTicker('AAPL', document.querySelector('.tbtn.active'));
+window.addEventListener('resize', ()=>{ if(currentData) render(currentData); });
+</script>
+</body>
+</html>
