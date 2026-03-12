@@ -1,6 +1,6 @@
 """
-EarningsAgent — JPMorgan-style pre-earnings research brief
-PortfolioAgent — BlackRock-style portfolio builder
+EarningsAgent — Brief-style pre-earnings research brief
+PortfolioAgent — Build portfolio-style portfolio builder
 Both use Ollama llama3.1 for AI reasoning
 """
 import requests, json, sys, os, time
@@ -35,9 +35,9 @@ class EarningsAgent:
         signals   = compute_technical_signals(ticker, ["RSI","MACD","BOLLINGER","MOMENTUM"])
         funds     = get_fundamentals(ticker)
 
-        print(f"[EarningsAgent] Data fetched. Generating JPMorgan-style brief...")
+        print(f"[EarningsAgent] Data fetched. Generating Brief-style brief...")
 
-        prompt = f"""You are a senior equity research analyst at JPMorgan Chase.
+        prompt = f"""You are a senior equity research analyst.
 Write a complete pre-earnings research brief for institutional investors.
 
 REAL MARKET DATA:
@@ -102,7 +102,7 @@ Format professionally. Use numbers everywhere. Be specific."""
         brief = self._call_ollama(prompt)
 
         print("\n" + "="*65)
-        print(f"  JPMorgan-Style Pre-Earnings Brief: {ticker}")
+        print(f"  Brief-Style Pre-Earnings Brief: {ticker}")
         print("="*65)
         print(brief)
         print("="*65)
@@ -137,10 +137,10 @@ class PortfolioAgent:
               risk: str, goal: str, monthly: int = 0,
               account_type: str = "taxable") -> str:
 
-        print(f"\n[PortfolioAgent] Building BlackRock-style portfolio...")
+        print(f"\n[PortfolioAgent] Building portfolio-style portfolio...")
         portfolio = build_portfolio(age, income, savings, risk, goal, monthly)
 
-        prompt = f"""You are a senior portfolio strategist at BlackRock managing $500M+ for institutional clients.
+        prompt = f"""You are a senior portfolio strategist managing $500M+ for institutional clients.
 Build a complete investment portfolio for this client.
 
 CLIENT PROFILE:
@@ -193,7 +193,7 @@ Use real numbers everywhere. Be specific and institutional-grade."""
         doc = self._call_ollama(prompt)
 
         print("\n" + "="*65)
-        print("  BlackRock-Style Investment Portfolio")
+        print("  Portfolio-Style Investment Portfolio")
         print("="*65)
         print(doc)
         print("="*65)

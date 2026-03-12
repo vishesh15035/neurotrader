@@ -1,0 +1,76 @@
+PRE-EARNINGS BRIEF: AAPL
+Generated: 2026-03-12 23:23
+
+**📋 DECISION SUMMARY**
+AAPL's Q1 earnings are expected to be a significant catalyst for the stock. We anticipate a beat in EPS, driven by strong revenue growth and expanding margins. A 10% upside is possible if the company delivers a beat.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**1. EARNINGS BEAT/MISS HISTORY (last 4 quarters table)**
+
+| Quarter | Actual EPS | Estimated EPS | Beat/Miss |
+| --- | --- | --- | --- |
+| 2025-12-31 | $6.43 | $5.95 | Beat 8.0% |
+| 2025-09-30 | $5.63 | $5.45 | Beat 3.2% |
+| 2025-06-30 | $5.15 | $5.25 | Miss 1.9% |
+| 2025-03-31 | $4.98 | $5.10 | Miss 2.4% |
+
+**2. CONSENSUS ESTIMATES (EPS, Revenue for upcoming quarter)**
+
+* Forward EPS: $6.10
+* Forward Revenue: $143.8 billion
+* Revenue Growth: 15.7%
+* Forward P/E: 42.1x
+
+**3. KEY METRICS WALL STREET IS WATCHING**
+
+* Gross Margin: 47.3%
+* Operating Margin: 35.4%
+* Net Margin: 27.0%
+* Free Cash Flow: $106.3 billion
+
+**4. SEGMENT REVENUE BREAKDOWN & TRENDS**
+
+* iPhone Revenue: 53.2% of total revenue
+* Services Revenue: 24.5% of total revenue
+* Wearables Revenue: 12.3% of total revenue
+
+**5. MANAGEMENT GUIDANCE SUMMARY**
+
+* Revenue growth expected to accelerate in Q1
+* Gross margin expansion expected due to cost savings
+* Operating expenses expected to increase due to investments in R&D and marketing
+
+**6. OPTIONS IMPLIED MOVE ANALYSIS**
+
+* Implied Move: ±1.79%
+* Straddle Cost: $4.56
+* Bull Target: $259.76
+* Bear Target: $250.64
+
+**7. HISTORICAL STOCK REACTIONS AFTER EARNINGS**
+
+* Average Stock Move: 2.5%
+* Upside Moves: 4 out of 10
+* Downside Moves: 3 out of 10
+
+**8. BULL CASE (scenario + price target + % upside)**
+
+* Scenario: AAPL beats EPS and revenue estimates, and provides positive guidance for Q2.
+* Price Target: $282.50
+* % Upside: 10.7%
+
+**9. BEAR CASE (scenario + price target + % downside)**
+
+* Scenario: AAPL misses EPS and revenue estimates, and provides negative guidance for Q2.
+* Price Target: $235.00
+* % Downside: 8.2%
+
+**10. RECOMMENDED PLAY**
+
+* Buy before earnings on a dip to $250.00 or lower, with a stop-loss at $245.00.
+* Target price: $282.50.
+* Upside potential: 10.7% (based on bull case scenario).
+* Risk-reward ratio: 2.1:1 ( potential upside vs. potential downside).
+
+This recommendation is based on our analysis of AAPL's historical earnings beats/misses, consensus estimates, key metrics, and options implied move analysis. However, investors should note that the stock's performance can be influenced by various factors, including macroeconomic trends, competition, and regulatory changes.

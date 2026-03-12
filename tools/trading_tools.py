@@ -246,7 +246,7 @@ def _simple_sentiment(text: str) -> str:
     ns  = sum(1 for w in neg if w in text)
     return "POSITIVE" if ps > ns else "NEGATIVE" if ns > ps else "NEUTRAL"
 
-def run_backtest(ticker: str, strategy: str, period: str = "1y") -> dict:
+def run_backtest(ticker: str, strategy: str, period: str = "1y", **kwargs) -> dict:
     try:
         hist  = yf.Ticker(ticker).history(period=period)
         close = hist['Close']

@@ -39,8 +39,8 @@ def main():
 Commands:
   quant <TICKER>    — Run ALL 10 advanced models
   analyze <TICKER>  — Ollama AI ReAct analysis
-  earnings <TICKER> — JPMorgan-style earnings brief
-  portfolio         — BlackRock portfolio builder
+  earnings <TICKER> — Brief-style earnings brief
+  portfolio         — Build portfolio-style portfolio builder
   scan              — Scan AAPL MSFT NVDA GOOGL SPY
   q                 — quit
 """)
@@ -57,7 +57,7 @@ Commands:
             elif mode=="earnings" and arg: nt.earnings.analyze(arg)
             elif mode=="scan":             nt.scan()
             elif mode=="portfolio":
-                print("\nBlackRock Portfolio Builder:")
+                print("\nPortfolio Builder:")
                 age     = int(input("  Age: "))
                 income  = int(input("  Annual income ($): "))
                 savings = int(input("  Current savings ($): "))

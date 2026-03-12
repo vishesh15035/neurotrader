@@ -50,8 +50,8 @@ Open dashboard: `http://127.0.0.1:5000/dashboard`
 ```
 quant AAPL      — Run all 19 models (~16s)
 analyze AAPL    — Ollama AI ReAct agent analysis
-earnings AAPL   — earnings brief
-portfolio       — portfolio builder
+earnings AAPL   — Brief-style earnings brief
+portfolio       — Build portfolio-style portfolio builder
 scan            — Scan AAPL MSFT NVDA GOOGL SPY
 q               — Quit
 ```

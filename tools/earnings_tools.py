@@ -135,7 +135,7 @@ def get_options_implied_move(ticker: str) -> dict:
 
 def build_portfolio(age: int, income: int, savings: int,
                     risk: str, goal: str, monthly_invest: int = 0) -> dict:
-    """BlackRock-style portfolio construction"""
+    """Portfolio construction based on risk profile"""
     # Risk profiles
     profiles = {
         "aggressive": {"stocks":0.85,"bonds":0.10,"alternatives":0.05,"exp_return":(10,14),"max_dd":-35},

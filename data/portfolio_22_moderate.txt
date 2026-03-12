@@ -1,0 +1,87 @@
+INVESTMENT PORTFOLIO — MODERATE RISK
+Generated: 2026-03-12 23:17
+
+**PORTFOLIO SUMMARY**
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. **ASSET ALLOCATION**
+
+| Asset Class | Allocation (%) | Description |
+| --- | --- | --- |
+| Stocks | 65.0% | Represents a moderate risk profile with a significant allocation to equities, balanced by a moderate allocation to bonds and alternatives. |
+| Bonds | 25.0% | Provides a stable income stream and reduces overall portfolio volatility. |
+| Alternatives | 10.0% | Adds diversification and potential for long-term growth, while managing risk. |
+
+ Pie Chart: Stocks (65%), Bonds (25%), Alternatives (10%)
+
+2. **SPECIFIC ETF RECOMMENDATIONS**
+
+| Ticker | Name | Allocation (%) | Reasoning |
+| --- | --- | --- | --- |
+| **CORE** |
+| VTI | Vanguard Total Market | 26.0% | Low-cost, broad US market exposure, and efficient diversification. |
+| VXUS | Vanguard Total Intl | 13.0% | Provides global equity exposure, reducing home bias and increasing diversification. |
+| VYM | Vanguard High Dividend | 9.7% | Offers a stable income stream and diversification within the dividend space. |
+| BND | Vanguard Total Bond | 15.0% | Provides broad bond market exposure, reducing credit risk and increasing liquidity. |
+| **SATELLITE** |
+| QQQ | Invesco Nasdaq 100 | 9.7% | Offers concentrated exposure to the tech sector, adding potential for growth. |
+| VB | Vanguard Small Cap | 6.5% | Provides exposure to small-cap US equities, increasing diversification and potential for long-term growth. |
+| VNQ | Vanguard Real Estate | 4.0% | Offers exposure to the real estate sector, adding diversification and potential for long-term growth. |
+| PDBC | Invesco Commodities | 3.0% | Provides exposure to commodities, adding diversification and potential for long-term growth. |
+| GLD | SPDR Gold Shares | 3.0% | Offers exposure to gold, adding diversification and potential for long-term growth. |
+
+3. **EXPECTED PERFORMANCE**
+
+* Annual return range: 7-10%
+* Max drawdown: -25%
+* Projected value in 43 yrs: $14,381,224
+
+4. **DOLLAR COST AVERAGING PLAN**
+
+| ETF | Allocation ($) | Monthly Investment ($3,000) |
+| --- | --- | --- |
+| VTI | 26.0% ($780.00) | $780.00 |
+| VXUS | 13.0% ($390.00) | $390.00 |
+| QQQ | 9.7% ($291.00) | $291.00 |
+| VYM | 9.7% ($291.00) | $291.00 |
+| BND | 15.0% ($450.00) | $450.00 |
+| VB | 6.5% ($195.00) | $195.00 |
+| VNQ | 4.0% ($120.00) | $120.00 |
+| PDBC | 3.0% ($90.00) | $90.00 |
+| GLD | 3.0% ($90.00) | $90.00 |
+| VTIP | 5.0% ($150.00) | $150.00 |
+| BNDX | 5.0% ($150.00) | $150.00 |
+
+5. **REBALANCING RULES**
+
+* Schedule: Quarterly (March 31st, June 30th, September 30th, December 31st)
+* Trigger thresholds:
+	+ Rebalance when any ETF's allocation deviates by 5% or more from its target allocation.
+	+ Rebalance when the portfolio's overall asset allocation deviates by 5% or more from its target allocation.
+
+6. **TAX EFFICIENCY STRATEGY**
+
+* Harvest tax losses by selling losing positions, and reinvesting in similar ETFs to minimize tax liabilities.
+* Consider tax-loss harvesting for all non-core ETFs (i.e., QQQ, VB, VNQ, PDBC, GLD).
+* For tax purposes, consider allocating a portion of monthly investments to core ETFs (VTI, VXUS, BND, VYM) to minimize trading activity and associated taxes.
+
+7. **BENCHMARK**
+
+* The portfolio's performance will be measured against the Vanguard Total US Market Index (VTI) and the MSCI ACWI Ex US Index (VXUS) as the core benchmarks.
+* The portfolio's overall performance will be evaluated using a weighted average of the core and satellite ETFs' performance.
+
+**INVESTMENT POLICY STATEMENT**
+
+As a client, I, [Client Name], hereby commit to the following investment policy:
+
+1. **Asset Allocation**: The portfolio will be managed according to the asset allocation outlined above, with a focus on maintaining a moderate risk profile.
+2. **Dollar Cost Averaging**: Monthly investments of $3,000 will be made into the portfolio, according to the dollar-cost averaging plan outlined above.
+3. **Rebalancing**: The portfolio will be rebalanced quarterly, according to the schedule and trigger thresholds outlined above.
+4. **Tax Efficiency**: The portfolio will be managed to minimize tax liabilities, through tax-loss harvesting and other tax-efficient strategies.
+5. **Risk Management**: The portfolio will be managed to maintain a maximum drawdown of -25%, with a focus on preserving capital.
+
+By signing below, I acknowledge that I have read and understood the investment policy outlined above, and I commit to following the rules and guidelines outlined in this document.
+
+Signature: ______________________________________
+Date: ___________________________________________
